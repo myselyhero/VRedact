@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">VRedact</string>
+
+    <string name="filter_none">默认</string>
+    <string name="filter_amaro">阿玛罗</string>
+    <string name="filter_brannan">布兰南</string>
+    <string name="filter_brooklyn">布鲁克林</string>
+    <string name="filter_Earlybird">晨鸟</string>
+    <string name="filter_freud">弗洛伊德</string>
+    <string name="filter_hefe">海菲</string>
+    <string name="filter_hudson">哈德生</string>
+    <string name="filter_inkwell">墨水池</string>
+    <string name="filter_kevin">凯文</string>
+    <string name="filter_lomo">洛莫</string>
+    <string name="filter_n1977">1977</string>
+    <string name="filter_nashville">纳什维尔</string>
+    <string name="filter_pixar">皮克斯</string>
+    <string name="filter_rise">上升</string>
+    <string name="filter_sierra">塞拉</string>
+    <string name="filter_sutro">萨特罗</string>
+    <string name="filter_toastero">烤面包机2</string>
+    <string name="filter_valencia">瓦伦西亚</string>
+    <string name="filter_walden">沃尔登</string>
+    <string name="filter_xproii">XproII</string>
+    <string name="filter_whitecat">白猫</string>
+    <string name="filter_blackcat">黑猫</string>
+    <string name="filter_romance">浪漫</string>
+    <string name="filter_sakura">樱花</string>
+    <string name="filter_antique">古董</string>
+    <string name="filter_beauty">美人</string>
+    <string name="filter_calm">冷静</string>
+    <string name="filter_cool">凉爽的</string>
+    <string name="filter_emerald">翡翠的</string>
+    <string name="filter_evergreen">常绿</string>
+    <string name="filter_fairytale">童话</string>
+    <string name="filter_healthy">健康的</string>
+    <string name="filter_latte">拿铁</string>
+    <string name="filter_nostalgia">怀旧</string>
+    <string name="filter_tender">温柔的</string>
+    <string name="filter_warm">温暖的</string>
+    <string name="filter_sweets">糖果</string>
+    <string name="filter_sunrise">日出</string>
+    <string name="filter_sunset">日落</string>
+    <string name="filter_skinwhiten">白皮肤</string>
+    <string name="filter_crayon">蜡笔</string>
+    <string name="filter_sketch">素描</string>
+
+    <string name="video_record_cut_input">点击输入文字</string>
 </resources>

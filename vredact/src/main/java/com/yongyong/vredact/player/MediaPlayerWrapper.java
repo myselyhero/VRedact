@@ -5,6 +5,8 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.view.Surface;
 
+import com.yongyong.vredact.entity.VideoInfo;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

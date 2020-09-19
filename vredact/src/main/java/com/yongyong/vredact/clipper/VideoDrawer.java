@@ -1,4 +1,4 @@
-package com.yongyong.vredact.player;
+package com.yongyong.vredact.clipper;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -20,6 +20,7 @@ import com.yongyong.vredact.filter.RotationOESFilter;
 import com.yongyong.vredact.filter.WaterMarkFilter;
 import com.yongyong.vredact.filter.advanced.MagicBeautyFilter;
 import com.yongyong.vredact.filter.gpuimage.GPUImageFilter;
+import com.yongyong.vredact.entity.VideoInfo;
 import com.yongyong.vredact.tool.EasyGlUtils;
 import com.yongyong.vredact.tool.MatrixUtils;
 import com.yongyong.vredact.view.SlideGpuFilterGroup;

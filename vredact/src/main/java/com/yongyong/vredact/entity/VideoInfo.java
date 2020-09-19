@@ -1,4 +1,4 @@
-package com.yongyong.vredact.player;
+package com.yongyong.vredact.entity;
 
 import java.io.Serializable;
 

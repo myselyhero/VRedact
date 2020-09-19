@@ -118,6 +118,14 @@ public abstract class AFilter {
         //Log.e("videoo", "---卡主了？ 21");
     }
 
+    public void draw(long time){
+        onClear();
+        onUseProgram();
+        onSetExpandData();
+        onBindTexture();
+        onDraw();
+    }
+
     public final void setMatrix(float[] matrix){
         this.matrix=matrix;
     }

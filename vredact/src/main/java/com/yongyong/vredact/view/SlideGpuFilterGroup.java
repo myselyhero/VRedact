@@ -86,6 +86,14 @@ public class SlideGpuFilterGroup {
         rightFilter = getFilter(getRightIndex());
     }
 
+    public void setFilter(int i){
+        curIndex = i;
+        locked = true;
+        downX = -1;
+        needSwitch = true;
+        direction = -1;
+    }
+
     private GPUImageFilter getFilter(int index) {
         GPUImageFilter filter = MagicFilterFactory.initFilters(types[index]);
         if (filter == null) {
