@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //vrCameraLayout = findViewById(R.id.main_camera);
         renderingLayout = findViewById(R.id.main_rendering);
-        renderingLayout.setVideoPath(VRConstants.DIR_CACHE + "1600433643690.mp4");
-        renderingLayout.onStart();
+        //renderingLayout.setVideoPath(VRConstants.DIR_CACHE + "1600433643690.mp4");
+        //renderingLayout.onStart();
     }
 
     @Override

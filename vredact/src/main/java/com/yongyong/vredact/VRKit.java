@@ -18,7 +18,7 @@ public class VRKit {
     public static final void init(Context context){
         mAppContext = context;
         VRConstants.initScreen();
-        VRFileUtils.initPath();
+        //VRFileUtils.initPath();
     }
 
     /**
