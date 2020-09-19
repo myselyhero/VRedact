@@ -28,7 +28,7 @@ import com.yongyong.vredact.filter.AFilter;
 import com.yongyong.vredact.filter.NoFilter;
 import com.yongyong.vredact.filter.RotationOESFilter;
 import com.yongyong.vredact.filter.gpuimage.GPUImageFilter;
-import com.yongyong.vredact.player.VideoInfo;
+import com.yongyong.vredact.entity.VideoInfo;
 import com.yongyong.vredact.tool.EasyGlUtils;
 import com.yongyong.vredact.tool.MatrixUtils;
 import com.yongyong.vredact.tool.OpenGlUtils;

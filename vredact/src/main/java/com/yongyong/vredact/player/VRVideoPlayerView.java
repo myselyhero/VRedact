@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.Surface;
 
+import com.yongyong.vredact.clipper.VideoDrawer;
+import com.yongyong.vredact.entity.VideoInfo;
 import com.yongyong.vredact.view.SlideGpuFilterGroup;
 
 import java.io.IOException;
@@ -168,9 +170,20 @@ public class VRVideoPlayerView extends GLSurfaceView implements GLSurfaceView.Re
     /**
      * 获取当前视频的长度
      * */
-    public int getVideoDuration(){
-        return mMediaPlayer.getCurVideoDuration();
+    public int getDuration(){
+        return mMediaPlayer == null ? 0 : mMediaPlayer.getCurVideoDuration();
     }
+
+    /**
+     *
+     * @return
+     */
+    public int getCurrentPosition(){
+        if (mMediaPlayer == null)
+            return 0;
+        return mMediaPlayer.getCurPosition();
+    }
+
     /**
      * 获取当前播放的视频的列表
      * */

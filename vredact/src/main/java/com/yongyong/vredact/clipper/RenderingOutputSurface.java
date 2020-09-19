@@ -15,13 +15,21 @@ package com.yongyong.vredact.clipper;
  * limitations under the License.
  */
 
+
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.opengl.EGL14;
 import android.util.Log;
 import android.view.Surface;
 
+import com.yongyong.vredact.VRKit;
 import com.yongyong.vredact.filter.gpuimage.GPUImageFilter;
 import com.yongyong.vredact.entity.VideoInfo;
+import com.yongyong.vredact.view.VideoRecordCutBaseView;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -44,7 +52,7 @@ import javax.microedition.khronos.egl.EGLSurface;
  * By default, the Surface will be using a BufferQueue in asynchronous mode, so we
  * can potentially drop frames.
  */
-class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
+class RenderingOutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = "OutputSurface";
     private static final boolean VERBOSE = false;
     private static final int EGL_OPENGL_ES2_BIT = 4;
@@ -56,13 +64,24 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private Surface mSurface;
     private Object mFrameSyncObject = new Object();     // guards mFrameAvailable
     private boolean mFrameAvailable;
-    private TextureRender mTextureRender;
+//    private TextureRender mTextureRender;
+    private VideoRenderingDrawer mDrawer;
 
     /**
      * Creates an OutputSurface using the current EGL context.  Creates a Surface that can be
      * passed to MediaCodec.configure().
      */
-    public OutputSurface(VideoInfo info) {
+    public RenderingOutputSurface(VideoInfo info) {
+        if (info.width <= 0 || info.height <= 0) {
+            throw new IllegalArgumentException();
+        }
+        setup(info);
+    }
+    private ArrayList<VideoRecordCutBaseView> mViews = new ArrayList<>();
+    private Resources mResources;
+    public RenderingOutputSurface(VideoInfo info, ArrayList<VideoRecordCutBaseView> views, Resources res) {
+        mViews = views;
+        mResources = res;
         if (info.width <= 0 || info.height <= 0) {
             throw new IllegalArgumentException();
         }
@@ -77,20 +96,48 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
 //        mTextureRender = new TextureRender(info);
 //        mTextureRender.surfaceCreated();
 
-      /*  mDrawer = new VideoDrawer(MyApplication.getContext(),MyApplication.getContext().getResources());
+        mDrawer = new VideoRenderingDrawer(VRKit.getAppContext(), VRKit.getAppContext().getResources());
 
-        mDrawer.onSurfaceCreated(null,null);
-        if (info.rotation == 0 || info.rotation == 180){
-            mDrawer.onSurfaceChanged(null,info.width,info.height);
-        }else {
-            mDrawer.onSurfaceChanged(null,info.height,info.width);
+        if (mViews != null && mViews.size() > 0) {
+            for (int i = 0; i < mViews.size(); i++) {
+                VideoRecordCutBaseView baseImageView = mViews.get(i);
+                Bitmap bitmap = baseImageView.getBitmap();
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+//                int x = (int) ((baseImageView.getX() - width/2) /StaticFinalValues.VIDEO_WIDTH_HEIGHT) ;
+                int x = (int) baseImageView.getX() - width/2 ;
+//                int x = (int) baseImageView.getX();
+                int y = (int) baseImageView.getY();
+                int y1 = (int)(info.height - (y / 0.85f) - (height/0.85f/2));
+                Matrix matrix = baseImageView.getMatrix();
+                float[] v = new float[9];
+                matrix.getValues(v);
+                float leftBottomY = baseImageView.getLeftBottomY();
+                float leftBottomX = baseImageView.getLeftBottomX();
+                float rAngle = Math.round(Math.atan2(v[Matrix.MSKEW_X], v[Matrix.MSCALE_X]) * (180 / Math.PI)) * -1;
+                int y3  = 0;
+                if(info.width < info.height) {
+                    y3 = (int) ((1120 - leftBottomY) * ((float) info.height / 1120));
+                }else{
+                    y3 = (int) ((630 - leftBottomY) * ((float) info.height / 630));
+                }
+                int viewWidth = (int) baseImageView.getViewWidth();
+                int viewHeight = (int) baseImageView.getViewHeight();
+                if(viewWidth > 200) {
+//                    viewWidth = viewWidth + (int) ((viewWidth - 200) * 0.25);
+//                    viewHeight = viewHeight + (int) ((viewHeight - 200) * 0.25);
+                    viewWidth = (int)(viewWidth * 1.2);
+                    viewHeight = (int)(viewHeight * 1.2);
+                }
+                mDrawer.addWaterMarkFilter(mResources, (int)leftBottomX, y3, viewWidth, viewHeight,baseImageView.getStartTime(),baseImageView.getEndTime(), bitmap,baseImageView.getGifId(),baseImageView.isGif(),rAngle);
+//                mDrawer.addWaterMarkFilter(mResources, (int)tx, y1,baseImageView.getWidth(),baseImageView.getHeight(),baseImageView.getStartTime(),baseImageView.getEndTime(), bitmap,baseImageView.getGifId(),baseImageView.isGif(),baseImageView.getRotateDegree());
+//                mDrawer.addWaterMarkFilter(mResources,new Random().nextInt(100),new Random().nextInt(200),50,50,baseImageView.getStartTime(),baseImageView.getEndTime(),baseImageView.getBitmap());
+            }
         }
-        mDrawer.onVideoChanged(info);*/
-
-        mTextureRender = new TextureRender(info);
-        mTextureRender.surfaceCreated();
-        mTextureRender.onVideoSizeChanged(info);
-        mSurfaceTexture = new SurfaceTexture(mTextureRender.getTextureId());
+        mDrawer.onSurfaceCreated(null,null);
+        mDrawer.onSurfaceChanged(null,info.width,info.height);
+        mDrawer.onVideoChanged(info);
+//        mDrawer.onSurfaceChanged(null,(int)(info.width * StaticFinalValues.VIDEO_WIDTH_HEIGHT),(int)(info.height * StaticFinalValues.VIDEO_WIDTH_HEIGHT));
 
         // Even if we don't access the SurfaceTexture after the constructor returns, we
         // still need to keep a reference to it.  The Surface doesn't retain a reference
@@ -98,7 +145,7 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         // causes the native finalizer to run.
 //        if (VERBOSE) Log.d(TAG, "textureID=" + mTextureRender.getTextureId());
 //        mSurfaceTexture = new SurfaceTexture(mTextureRender.getTextureId());
-//        mSurfaceTexture = mDrawer.getSurfaceTexture();
+        mSurfaceTexture = mDrawer.getSurfaceTexture();
 
         // This doesn't work if OutputSurface is created on the thread that CTS started for
         // these test cases.
@@ -120,7 +167,7 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
      * @param info
      * @param clipMode
      */
-    public OutputSurface(VideoInfo info, int clipMode) {
+    public RenderingOutputSurface(VideoInfo info, int clipMode) {
         if (info.width <= 0 || info.height <= 0) {
             throw new IllegalArgumentException();
         }
@@ -205,8 +252,8 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         mEGLContext = null;
         mEGLSurface = null;
         mEGL = null;
-        mTextureRender = null;
-//        mDrawer = null;
+//        mTextureRender = null;
+        mDrawer = null;
         mSurface = null;
         mSurfaceTexture = null;
     }
@@ -251,10 +298,10 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
                     // Wait for onFrameAvailable() to signal us.  Use a timeout to avoid
                     // stalling the test if it doesn't arrive.
                     mFrameSyncObject.wait(TIMEOUT_MS);
-                    if (!mFrameAvailable) {
+                    /*if (!mFrameAvailable) {
                         // TODO: if "spurious wakeup", continue while loop
                         throw new RuntimeException("Surface frame wait timed out");
-                    }
+                    }*/
                 } catch (InterruptedException ie) {
                     // shouldn't happen
                     throw new RuntimeException(ie);
@@ -265,15 +312,20 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         // Latch the data.
 //        mTextureRender.checkGlError("before updateTexImage");
 //        mDrawer.checkGlError("before updateTexImage");
-        mSurfaceTexture.updateTexImage();
+//        mSurfaceTexture.updateTexImage();
     }
 
     /**
      * Draws the data from SurfaceTexture onto the current EGL surface.
      */
     public void drawImage() {
-        mTextureRender.drawFrame(mSurfaceTexture);
+//        mTextureRender.drawFrame(mSurfaceTexture);
+        mDrawer.onDrawFrame(null);
+    }
+    public void drawImage(long mCuurTime) {
+//        mTextureRender.drawFrame(mSurfaceTexture);
 //        mDrawer.onDrawFrame(null);
+        mDrawer.setMediaTime(mCuurTime);
     }
 
     @Override
@@ -304,9 +356,13 @@ class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         }
     }
     public void addGpuFilter(GPUImageFilter filter){
-        mTextureRender.addGpuFilter(filter);
+        mDrawer.setGpuFilter(filter);
     }
+    public void isBeauty(boolean isBeauty){
+        mDrawer.isOpenBeauty(isBeauty);
+    }
+
     public void onVideoSizeChanged(VideoInfo info){
-        mTextureRender.onVideoSizeChanged(info);
+//        mTextureRender.onVideoSizeChanged(info);
     }
 }

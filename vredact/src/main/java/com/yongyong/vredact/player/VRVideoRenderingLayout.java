@@ -15,9 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.yongyong.vredact.R;
-import com.yongyong.vredact.clipper.VideoClipper;
+import com.yongyong.vredact.clipper.RenderingVideoClipper;
+import com.yongyong.vredact.entity.VideoInfo;
 import com.yongyong.vredact.filter.MagicFilterType;
-import com.yongyong.vredact.tool.VRFileUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,10 +114,9 @@ public class VRVideoRenderingLayout extends FrameLayout {
             return true;
         });
 
-        Log.e(TAG, "initView: 开始处理。。。");
         mPlayerView.pause();
 
-        VideoClipper clipper = new VideoClipper();
+        /*VideoClipper clipper = new VideoClipper();
         if (mBeautify.isSelected()){
             clipper.showBeauty();
         }
@@ -132,7 +131,30 @@ public class VRVideoRenderingLayout extends FrameLayout {
             }
         });
         try {
-            clipper.clipVideo(0,mPlayerView.getVideoDuration()*1000);
+            clipper.clipVideo(0,mPlayerView.getDuration()*1000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        RenderingVideoClipper clipper = new RenderingVideoClipper();
+        clipper.setInputVideoPath(mVideoPath);
+        final String outputPath = System.currentTimeMillis() + ".mp4";
+        clipper.setFilterType(mCurrentFilterType);
+        clipper.setOutputVideoPath(outputPath);
+        clipper.setOnVideoCutFinishListener(new RenderingVideoClipper.OnVideoCutFinishListener() {
+            @Override
+            public void onFinish() {
+                mHandler.sendEmptyMessage(VIDEO_CUT_FINISH);
+            }
+
+            @Override
+            public void onProgress(float percent) {
+
+            }
+        });
+        try {
+            int clipDur = mPlayerView.getDuration() * 1000;
+            clipper.clipVideo(0, clipDur, new ArrayList<>(), getResources());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -201,5 +223,21 @@ public class VRVideoRenderingLayout extends FrameLayout {
                 //mPlayerView.start();
             }
         });
+    }
+
+    /**
+     *
+     * @return
+     */
+    public long getCurrentPosition(){
+        return mPlayerView.getCurrentPosition();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public long getDuration(){
+        return mPlayerView.getDuration();
     }
 }
