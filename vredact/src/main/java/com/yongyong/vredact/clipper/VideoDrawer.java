@@ -183,7 +183,7 @@ public class VideoDrawer implements GLSurfaceView.Renderer {
         mShow.setTextureId(mProcessFilter.getOutputTexture());
 
         mShow.draw();
-        Log.e("videoo", "---卡完了 ？");
+        //Log.e("videoo", "---卡完了 ？");
     }
     public SurfaceTexture getSurfaceTexture(){
         return surfaceTexture;

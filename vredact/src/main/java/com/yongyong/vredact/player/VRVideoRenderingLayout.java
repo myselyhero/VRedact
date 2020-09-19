@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -136,7 +137,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
             e.printStackTrace();
         }*/
 
-        RenderingVideoClipper clipper = new RenderingVideoClipper();
+        /*RenderingVideoClipper clipper = new RenderingVideoClipper();
         clipper.setInputVideoPath(mVideoPath);
         final String outputPath = System.currentTimeMillis() + ".mp4";
         clipper.setFilterType(mCurrentFilterType);
@@ -157,7 +158,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
             clipper.clipVideo(0, clipDur, new ArrayList<>(), getResources());
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /** 外部API */
@@ -166,6 +167,10 @@ public class VRVideoRenderingLayout extends FrameLayout {
      *
      */
     public void onStart(){
+        if (TextUtils.isEmpty(mVideoPath)){
+            return;
+        }
+
         if (resumed) {
             mPlayerView.start();
         }
@@ -182,9 +187,16 @@ public class VRVideoRenderingLayout extends FrameLayout {
     /**
      *
      */
-    protected void onDestroy() {
+    public void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
         mPlayerView.onDestroy();
+    }
+
+    /**
+     *
+     */
+    public void onSwitchBeautify(){
+        mPlayerView.switchBeauty();
     }
 
     /**
@@ -193,6 +205,9 @@ public class VRVideoRenderingLayout extends FrameLayout {
      */
     public void setVideoPath(String path) {
         mVideoPath = path;
+        if (TextUtils.isEmpty(mVideoPath)){
+            return;
+        }
         ArrayList<String> srcList = new ArrayList<>();
         srcList.add(path);
         mPlayerView.setVideoPath(srcList);
