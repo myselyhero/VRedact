@@ -38,13 +38,10 @@ public class VRCameraLayout extends FrameLayout {
 
     private static final String TAG = VRCameraView.class.getSimpleName();
 
-    private Activity mActivity;
-
     /**
      *
      */
     private VRCameraView mCameraView;
-    private LinearLayout mGoBack,mSwitchCamera;
     private FocusImageView mFocusImageView;
     private TextView textView;
 
@@ -55,6 +52,8 @@ public class VRCameraLayout extends FrameLayout {
     private boolean pausing;
     /**是否正在录制*/
     private boolean recordFlag;
+    /**  */
+    private boolean autoPausing;
 
     private MagicFilterType mCurrentFilterType = MagicFilterType.NONE;
 
@@ -82,27 +81,8 @@ public class VRCameraLayout extends FrameLayout {
     private void initView(){
         LayoutInflater.from(getContext()).inflate(R.layout.vr_camera_layout,this);
         mCameraView = findViewById(R.id.vr_camera_layout_camera);
-        mGoBack = findViewById(R.id.vr_camera_layout_back);
-        mSwitchCamera = findViewById(R.id.vr_camera_layout_switch);
         mFocusImageView = findViewById(R.id.vr_camera_layout_foucs);
         textView = findViewById(R.id.vr_camera_layout_hint);
-
-        mActivity = (Activity) getContext();
-
-        mGoBack.setOnClickListener(v -> {
-            if (mActivity != null)
-                mActivity.finish();
-        });
-        mSwitchCamera.setOnClickListener(v -> {
-            mCameraView.switchCamera();
-            if (mCameraView.getCameraId() == 1) {
-                //前置摄像头 使用美颜
-                mCameraView.changeBeautyLevel(VRBeautifyLevel.LEVEL_3);
-            } else {
-                //后置摄像头不使用美颜
-                mCameraView.changeBeautyLevel(VRBeautifyLevel.LEVEL_0);
-            }
-        });
 
         /**  */
         mCameraView.setOnTouchListener((v, event) -> {
@@ -162,6 +142,22 @@ public class VRCameraLayout extends FrameLayout {
 
     /**
      *
+     * @return
+     */
+    public String getVideoPath() {
+        return mVideoPath;
+    }
+
+    /**
+     *
+     * @param mVideoPath
+     */
+    public void setVideoPath(String mVideoPath) {
+        this.mVideoPath = mVideoPath;
+    }
+
+    /**
+     *
      * @return 真正使用的滤镜
      */
     public MagicFilterType getCurrentFilterType(){
@@ -189,9 +185,9 @@ public class VRCameraLayout extends FrameLayout {
      */
     public void onStart(){
         mCameraView.onResume();
-        if (recordFlag && pausing) {
+        if (recordFlag && autoPausing) {
             mCameraView.resume(true);
-            pausing = false;
+            autoPausing = false;
         }
     }
 
@@ -199,9 +195,9 @@ public class VRCameraLayout extends FrameLayout {
      *
      */
     public void onPause(){
-        if (recordFlag && !pausing) {
+        if (recordFlag && !autoPausing) {
             mCameraView.pause(true);
-            pausing = true;
+            autoPausing = true;
         }
         mCameraView.onPause();
     }
@@ -213,6 +209,7 @@ public class VRCameraLayout extends FrameLayout {
         if (!recordFlag) {
             recordFlag = true;
             pausing = false;
+            autoPausing = false;
             if (TextUtils.isEmpty(mVideoPath))
                 mVideoPath = VRFileUtils.getPathOfVideo();
             mCameraView.setSavePath(mVideoPath);
@@ -223,6 +220,20 @@ public class VRCameraLayout extends FrameLayout {
         } else {
             mCameraView.resume(false);
             pausing = false;
+        }
+    }
+
+    /**
+     *
+     */
+    public void switchCamera(){
+        mCameraView.switchCamera();
+        if (mCameraView.getCameraId() == 1) {
+            //前置摄像头 使用美颜
+            mCameraView.changeBeautyLevel(VRBeautifyLevel.LEVEL_3);
+        } else {
+            //后置摄像头不使用美颜
+            mCameraView.changeBeautyLevel(VRBeautifyLevel.LEVEL_0);
         }
     }
 

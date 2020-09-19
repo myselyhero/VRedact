@@ -34,10 +34,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
 
     private static final String TAG = VRVideoRenderingLayout.class.getSimpleName();
 
-    private Activity mActivity;
-
     private VRVideoPlayerView mPlayerView;
-    private LinearLayout mGoBack,mBeautify;
 
     private String mVideoPath;
     private boolean resumed;
@@ -92,21 +89,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
     private void initView(){
         LayoutInflater.from(getContext()).inflate(R.layout.vr_video_rendering_layout,this);
         mPlayerView = findViewById(R.id.vr_video_rendering_player);
-        mGoBack = findViewById(R.id.vr_video_rendering_back);
-        mBeautify = findViewById(R.id.vr_video_rendering_beautify);
-        mActivity = (Activity) getContext();
 
-        mGoBack.setOnClickListener(v -> {
-            mActivity.finish();
-        });
-        mBeautify.setOnClickListener(v -> {
-            mPlayerView.switchBeauty();
-            if (mBeautify.isSelected()){
-                mBeautify.setSelected(false);
-            }else {
-                mBeautify.setSelected(true);
-            }
-        });
         mPlayerView.setOnFilterChangeListener(type -> {
             mCurrentFilterType = type;
         });
@@ -190,6 +173,26 @@ public class VRVideoRenderingLayout extends FrameLayout {
     public void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
         mPlayerView.onDestroy();
+    }
+
+    /**
+     *
+     */
+    public void switchBeautify(){
+        mPlayerView.switchBeauty();
+        /*if (mBeautify.isSelected()){
+            mBeautify.setSelected(false);
+        }else {
+            mBeautify.setSelected(true);
+        }*/
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isPlaying() {
+        return isPlaying;
     }
 
     /**
