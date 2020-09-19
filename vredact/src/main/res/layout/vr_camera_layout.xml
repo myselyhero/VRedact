@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/vr_theme_background">
+    <com.yongyong.vredact.camera.VRCameraView
+        android:id="@+id/vr_camera_layout_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <LinearLayout
+                android:id="@+id/vr_camera_layout_back"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="50dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/vr_camera_go_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/vr_camera_layout_switch"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="50dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/vr_camera_switch"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/vr_camera_layout_button"
+            android:background="@drawable/vr_camera_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:clickable="true" />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/vr_camera_layout_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#fff"/>
+
+        <com.yongyong.vredact.view.FocusImageView
+            android:id="@+id/vr_camera_layout_foucs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:focus_fail_id="@mipmap/focus_focus_failed"
+            app:focus_focusing_id="@mipmap/focus_focusing"
+            app:focus_success_id="@mipmap/focus_focused" />
+    </RelativeLayout>
+</FrameLayout>
