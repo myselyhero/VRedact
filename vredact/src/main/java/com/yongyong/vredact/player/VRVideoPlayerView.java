@@ -33,20 +33,24 @@ public class VRVideoPlayerView extends GLSurfaceView implements GLSurfaceView.Re
 
     public VRVideoPlayerView(Context context) {
         super(context,null);
+        init();
     }
 
     public VRVideoPlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
+    /**
+     *
+     */
+    private void init() {
         setEGLContextClientVersion(2);
         setRenderer(this);
         setRenderMode(RENDERMODE_WHEN_DIRTY);
         setPreserveEGLContextOnPause(false);
         setCameraDistance(100);
-        mDrawer = new VideoDrawer(context,getResources());
+        mDrawer = new VideoDrawer(getContext(),getResources());
 
         //初始化Drawer和VideoPlayer
         mMediaPlayer = new MediaPlayerWrapper();

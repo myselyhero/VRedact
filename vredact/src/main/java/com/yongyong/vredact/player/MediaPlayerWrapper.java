@@ -90,6 +90,8 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     }
 
     public void start() {
+        if (mCurMediaPlayer == null)
+            return;
         mCurMediaPlayer.setSurface(surface);
         mCurMediaPlayer.start();
         if (mCallback != null) {
@@ -98,6 +100,8 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     }
 
     public void pause() {
+        if (mCurMediaPlayer == null)
+            return;
         mCurMediaPlayer.pause();
         if (mCallback != null) {
             mCallback.onVideoPause();

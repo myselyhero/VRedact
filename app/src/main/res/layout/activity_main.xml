@@ -6,8 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.yongyong.vredact.view.VRCameraLayout
+    <!--<com.yongyong.vredact.view.VRCameraLayout
         android:id="@+id/main_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>-->
+
+    <com.yongyong.vredact.player.VRVideoRenderingLayout
+        android:id="@+id/main_rendering"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
