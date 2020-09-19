@@ -1,2 +1,3 @@
+include ':vredact'
 include ':app'
 rootProject.name = "VideoRedact"
