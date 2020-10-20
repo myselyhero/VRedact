@@ -89,10 +89,10 @@ public class VRCameraDrawer implements GLSurfaceView.Renderer {
         OM= MatrixUtils.getOriginalMatrix();
         MatrixUtils.flip(OM,false,true);//矩阵上下翻转
 
-        /*WaterMarkFilter waterMarkFilter = new WaterMarkFilter(resources);
-        waterMarkFilter.setWaterMark(BitmapFactory.decodeResource(resources, R.mipmap.watermark));
+        WaterMarkFilter waterMarkFilter = new WaterMarkFilter(resources);
+        //waterMarkFilter.setWaterMark(BitmapFactory.decodeResource(resources, R.mipmap.watermark));
         waterMarkFilter.setPosition(30,50,0,0);
-        addFilter(waterMarkFilter);*/
+        addFilter(waterMarkFilter);
 
         recordingEnabled = false;
    }
