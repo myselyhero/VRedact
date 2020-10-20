@@ -1,8 +1,13 @@
 package com.yongyong.redact;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -13,17 +18,31 @@ import com.yongyong.vredact.view.VRCameraLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private VRCameraLayout vrCameraLayout;
     private VRVideoRenderingLayout renderingLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //vrCameraLayout = findViewById(R.id.main_camera);
+
         renderingLayout = findViewById(R.id.main_rendering);
-        //renderingLayout.setVideoPath(VRConstants.DIR_CACHE + "1600433643690.mp4");
-        //renderingLayout.onStart();
+
+        if (!checkPermission()){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},101);
+        }
+    }
+
+    private boolean checkPermission() {
+        boolean flag = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)) {
+            flag = false;
+        }
+        return flag;
     }
 
     @Override
