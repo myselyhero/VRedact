@@ -52,7 +52,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case VIDEO_PREPARE:
-                    Log.e(TAG, "handleMessage: 准备好了");
+                    Log.i(TAG, "handleMessage: 准备好了");
                     break;
                 case VIDEO_START:
                     isPlaying = true;
@@ -62,7 +62,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
                     break;
                 case VIDEO_CUT_FINISH:
                     //TODO　已经渲染结束了　
-                    Log.e(TAG, "handleMessage: 渲染结束");
+                    Log.i(TAG, "handleMessage: 渲染结束");
                     break;
             }
         }
@@ -212,7 +212,7 @@ public class VRVideoRenderingLayout extends FrameLayout {
             return;
         }
         ArrayList<String> srcList = new ArrayList<>();
-        srcList.add(path);
+        srcList.add(mVideoPath);
         mPlayerView.setVideoPath(srcList);
         mPlayerView.setIMediaCallback(new MediaPlayerWrapper.IMediaCallback() {
             @Override

@@ -40,6 +40,8 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
      * @param dataSource 视频播放的源文件
      */
     public void setDataSource(List<String> dataSource) {
+        if (dataSource == null)
+            return;
         this.mSrcList = dataSource;
         MediaMetadataRetriever retr = new MediaMetadataRetriever();
         for (int i = 0; i < dataSource.size(); i++) {
@@ -68,6 +70,8 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     }
 
     public void prepare() throws IOException {
+        if (mSrcList == null)
+            return;
         for (int i = 0; i < mSrcList.size(); i++) {
             MediaPlayer player = new MediaPlayer();
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -163,7 +167,7 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     }
 
     public boolean isPlaying() {
-        return mCurMediaPlayer.isPlaying();
+        return mCurMediaPlayer != null && mCurMediaPlayer.isPlaying();
     }
 
 
