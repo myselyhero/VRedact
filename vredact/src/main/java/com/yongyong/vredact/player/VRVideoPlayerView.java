@@ -91,6 +91,8 @@ public class VRVideoPlayerView extends GLSurfaceView implements GLSurfaceView.Re
         mDrawer.onDrawFrame(gl);
     }
     public void onDestroy(){
+        if (mMediaPlayer == null)
+            return;
         if(mMediaPlayer.isPlaying()){
             mMediaPlayer.stop();
         }
@@ -157,18 +159,24 @@ public class VRVideoPlayerView extends GLSurfaceView implements GLSurfaceView.Re
      * pause play
      * */
     public void pause(){
+        if (mMediaPlayer == null)
+            return;
         mMediaPlayer.pause();
     }
     /**
      * start play video
      * */
     public void start(){
+        if (mMediaPlayer == null)
+            return;
         mMediaPlayer.start();
     }
     /**
      * 跳转到指定的时间点，只能跳到关键帧
      * */
     public void seekTo(int time){
+        if (mMediaPlayer == null)
+            return;
         mMediaPlayer.seekTo(time);
     }
     /**
